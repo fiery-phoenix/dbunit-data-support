@@ -1,0 +1,22 @@
+apply plugin: 'java'
+sourceCompatibility = 1.8
+
+group 'fiery-phoenix'
+version '0.1'
+
+jar {
+    baseName = 'dbunit-data-support'
+}
+
+wrapper {
+    gradleVersion = '2.13'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.dbunit:dbunit:2.4.3'
+    testCompile 'junit:junit:4.11'
+}
