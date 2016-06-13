@@ -11,6 +11,7 @@ import org.dbunit.operation.DatabaseOperation;
 import java.sql.SQLException;
 
 import static org.dbunit.operation.DatabaseOperation.CLEAN_INSERT;
+import static org.dbunit.operation.DatabaseOperation.DELETE_ALL;
 import static org.dbunit.operation.DatabaseOperation.INSERT;
 
 public final class DbUnitDataUtils {
@@ -28,6 +29,10 @@ public final class DbUnitDataUtils {
 
     public static Field withNull(Column column) {
         return new Field(column.getColumnName(), null);
+    }
+
+    public static void clean(ConnectionAwareTable table) {
+        executeOperation(DELETE_ALL, new ConnectionAwareTableBuilder(table));
     }
 
     public static void cleanInsert(ConnectionAwareTableBuilder builder) {

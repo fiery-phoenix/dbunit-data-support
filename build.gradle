@@ -17,6 +17,6 @@ repositories {
 }
 
 dependencies {
-    compile 'org.dbunit:dbunit:2.4.3'
-    testCompile 'junit:junit:4.11'
+    compile 'org.dbunit:dbunit:2.5.2'
+    compile 'junit:junit:4.12'
 }
