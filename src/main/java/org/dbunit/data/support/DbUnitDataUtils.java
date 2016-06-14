@@ -43,7 +43,7 @@ public final class DbUnitDataUtils {
         executeOperation(INSERT, builder);
     }
 
-    public static void executeOperation(DatabaseOperation dbUnitOperation, ConnectionAwareTableBuilder builder) {
+    private static void executeOperation(DatabaseOperation dbUnitOperation, ConnectionAwareTableBuilder builder) {
         try {
             dbUnitOperation.execute(builder.getConnection(), builder.build());
         } catch (DatabaseUnitException | SQLException e) {

@@ -19,4 +19,5 @@ repositories {
 dependencies {
     compile 'org.dbunit:dbunit:2.5.2'
     compile 'junit:junit:4.12'
+    testCompile 'org.assertj:assertj-core:3.4.1'
 }
