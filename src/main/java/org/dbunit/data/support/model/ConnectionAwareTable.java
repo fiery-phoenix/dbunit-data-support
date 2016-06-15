@@ -1,4 +1,9 @@
 package org.dbunit.data.support.model;
 
-public interface ConnectionAwareTable extends Table, ConnectionAware {
+import org.dbunit.database.IDatabaseConnection;
+
+public interface ConnectionAwareTable extends Table {
+
+    IDatabaseConnection getConnection();
+
 }

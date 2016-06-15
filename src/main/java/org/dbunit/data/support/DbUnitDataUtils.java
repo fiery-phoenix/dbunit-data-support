@@ -3,7 +3,8 @@ package org.dbunit.data.support;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.data.support.exceptions.DbUnitRuntimeException;
 import org.dbunit.data.support.model.ConnectionAwareTable;
-import org.dbunit.data.support.model.ConnectionAwareTableBuilder;
+import org.dbunit.data.support.model.Row;
+import org.dbunit.data.support.model.TableBuilder;
 import org.dbunit.data.support.model.Field;
 import org.dbunit.dataset.Column;
 import org.dbunit.operation.DatabaseOperation;
@@ -19,10 +20,6 @@ public final class DbUnitDataUtils {
     private DbUnitDataUtils() {
     }
 
-    public static ConnectionAwareTableBuilder table(ConnectionAwareTable table) {
-        return new ConnectionAwareTableBuilder(table);
-    }
-
     public static Field with(Column column, Object value) {
         return new Field(column.getColumnName(), value);
     }
@@ -31,21 +28,25 @@ public final class DbUnitDataUtils {
         return new Field(column.getColumnName(), null);
     }
 
+    public static Row row(Field... fields) {
+        return new Row(fields);
+    }
+
     public static void clean(ConnectionAwareTable table) {
-        executeOperation(DELETE_ALL, new ConnectionAwareTableBuilder(table));
+        executeOperation(DELETE_ALL, table);
     }
 
-    public static void cleanInsert(ConnectionAwareTableBuilder builder) {
-        executeOperation(CLEAN_INSERT, builder);
+    public static void cleanInsert(ConnectionAwareTable table, Row... rows) {
+        executeOperation(CLEAN_INSERT, table, rows);
     }
 
-    public static void insert(ConnectionAwareTableBuilder builder) {
-        executeOperation(INSERT, builder);
+    public static void insert(ConnectionAwareTable table, Row... rows) {
+        executeOperation(INSERT, table, rows);
     }
 
-    private static void executeOperation(DatabaseOperation dbUnitOperation, ConnectionAwareTableBuilder builder) {
+    private static void executeOperation(DatabaseOperation dbUnitOperation, ConnectionAwareTable table, Row... rows) {
         try {
-            dbUnitOperation.execute(builder.getConnection(), builder.build());
+            dbUnitOperation.execute(table.getConnection(), new TableBuilder(rows).build(table));
         } catch (DatabaseUnitException | SQLException e) {
             throw new DbUnitRuntimeException(e);
         }
