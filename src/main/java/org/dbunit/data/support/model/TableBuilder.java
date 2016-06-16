@@ -13,7 +13,7 @@ public class TableBuilder {
 
     private final List<Row> rows = new LinkedList<>();
 
-    public TableBuilder(Row[] rows) {
+    public TableBuilder(Row... rows) {
         Collections.addAll(this.rows, rows);
     }
 

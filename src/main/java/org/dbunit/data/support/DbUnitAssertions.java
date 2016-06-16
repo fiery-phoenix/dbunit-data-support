@@ -10,9 +10,9 @@ import java.sql.SQLException;
 
 import static org.junit.Assert.assertEquals;
 
-public final class DbUnitAssertionUtils {
+public final class DbUnitAssertions {
 
-    private DbUnitAssertionUtils() {
+    private DbUnitAssertions() {
     }
 
     public static void assertIsEmpty(ConnectionAwareTable table) {

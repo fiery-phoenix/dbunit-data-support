@@ -12,16 +12,17 @@ import static org.dbunit.dataset.datatype.DataType.VARCHAR;
 
 public class DbUnitDataUtilsTest {
 
+    private static final String NAME = "NAME";
+    private static final Column NAME_COLUMN = new Column(NAME, VARCHAR);
+    public static final String AGE = "AGE";
+    private static final Column AGE_COLUMN = new Column(AGE, BIGINT);
+
     @Test
-    public void testWith() throws Exception {
-        assertThat(with(new Column("NAME", VARCHAR), "Jane"))
-                .isEqualToComparingFieldByField(new Field("NAME", "Jane"));
-        assertThat(with(new Column("AGE", BIGINT), 25))
-                .isEqualToComparingFieldByField(new Field("AGE", 25));
-        assertThat(with(new Column("AGE", BIGINT), "25"))
-                .isEqualToComparingFieldByField(new Field("AGE", "25"));
-        assertThat(withNull(new Column("AGE", BIGINT)))
-                .isEqualToComparingFieldByField(new Field("AGE", null));
+    public void testWith() {
+        assertThat(with(NAME_COLUMN, "Jane")).isEqualToComparingFieldByField(new Field(NAME, "Jane"));
+        assertThat(with(AGE_COLUMN, 25)).isEqualToComparingFieldByField(new Field(AGE, 25));
+        assertThat(with(AGE_COLUMN, "25")).isEqualToComparingFieldByField(new Field(AGE, "25"));
+        assertThat(withNull(AGE_COLUMN)).isEqualToComparingFieldByField(new Field(AGE, null));
     }
 
 }
