@@ -15,8 +15,8 @@ public final class DbUnitAssertions {
     private DbUnitAssertions() {
     }
 
-    public static void assertIsEmpty(ConnectionAwareTable table) {
-        assertEquals(0, getTable(table).getRowCount());
+    public static void assertEmpty(ConnectionAwareTable table) {
+        assertSize(table, 0);
     }
 
     public static void assertSize(ConnectionAwareTable table, int size) {
