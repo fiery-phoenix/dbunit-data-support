@@ -7,6 +7,9 @@ import org.dbunit.data.support.model.Row;
 import org.dbunit.data.support.model.TableBuilder;
 import org.dbunit.data.support.model.Field;
 import org.dbunit.dataset.Column;
+import org.dbunit.dataset.DataSetException;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.ITable;
 import org.dbunit.operation.DatabaseOperation;
 
 import java.sql.SQLException;
@@ -30,6 +33,15 @@ public final class DbUnitDataUtils {
 
     public static Row row(Field... fields) {
         return new Row(fields);
+    }
+
+    public static ITable getTable(ConnectionAwareTable table) {
+        try {
+            IDataSet actualDataSet = table.getConnection().createDataSet(new String[]{table.getName()});
+            return actualDataSet.getTable(table.getName());
+        } catch (SQLException | DataSetException e) {
+            throw new DbUnitRuntimeException(e);
+        }
     }
 
     public static void clean(ConnectionAwareTable table) {
