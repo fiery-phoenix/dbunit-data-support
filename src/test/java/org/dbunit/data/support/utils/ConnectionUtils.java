@@ -2,11 +2,18 @@ package org.dbunit.data.support.utils;
 
 import org.dbunit.JdbcDatabaseTester;
 import org.dbunit.data.support.exceptions.DbUnitRuntimeException;
+import org.dbunit.data.support.model.ConnectionAwareTable;
+import org.dbunit.data.support.model.Table;
 import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.Column;
 import org.h2.tools.RunScript;
 
 import java.nio.charset.Charset;
+import java.sql.Connection;
 import java.sql.SQLException;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public final class ConnectionUtils {
 
@@ -17,7 +24,7 @@ public final class ConnectionUtils {
 
     private static final IDatabaseConnection connection = createConnection();
 
-    public static IDatabaseConnection createConnection() {
+    private static IDatabaseConnection createConnection() {
         try {
             createSchema();
             return new JdbcDatabaseTester(JDBC_DRIVER, JDBC_URL, USER, PASSWORD).getConnection();
@@ -33,4 +40,36 @@ public final class ConnectionUtils {
     public static IDatabaseConnection getConnection() {
         return connection;
     }
+
+    public static Connection connectionMock() {
+        Connection connectionMock = mock(Connection.class);
+        try {
+        Connection realConnection = connection.getConnection();
+            when(connectionMock.getMetaData()).thenReturn(realConnection.getMetaData());
+        } catch (SQLException e) {
+           throw new DbUnitRuntimeException(e);
+        }
+
+        return connectionMock;
+    }
+
+    public static ConnectionAwareTable connectionAwareTable(Table table, IDatabaseConnection connection) {
+        return new ConnectionAwareTable() {
+            @Override
+            public IDatabaseConnection getConnection() {
+                return connection;
+            }
+
+            @Override
+            public String getName() {
+                return table.getName();
+            }
+
+            @Override
+            public Column[] getColumns() {
+                return table.getColumns();
+            }
+        };
+    }
+
 }
