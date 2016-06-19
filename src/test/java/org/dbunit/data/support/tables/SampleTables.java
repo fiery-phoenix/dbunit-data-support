@@ -9,7 +9,8 @@ import java.util.Arrays;
 
 public enum SampleTables implements ConnectionAwareTable {
 
-    CUSTOMERS("CUSTOMERS", Customers.getColumns());
+    CUSTOMERS("CUSTOMERS", Customers.getColumns()),
+    ORDERS("ORDERS", Orders.getColumns());
 
     private final String name;
 

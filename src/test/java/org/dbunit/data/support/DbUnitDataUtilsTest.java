@@ -29,6 +29,7 @@ import static org.dbunit.data.support.tables.Customers.FIRST_NAME;
 import static org.dbunit.data.support.tables.Customers.ID;
 import static org.dbunit.data.support.tables.Customers.LAST_NAME;
 import static org.dbunit.data.support.tables.SampleTables.CUSTOMERS;
+import static org.dbunit.data.support.tables.SampleTables.ORDERS;
 import static org.dbunit.data.support.utils.ConnectionUtils.connectionAwareTable;
 import static org.dbunit.data.support.utils.ConnectionUtils.connectionMock;
 import static org.dbunit.dataset.datatype.DataType.BIGINT;
@@ -65,25 +66,39 @@ public class DbUnitDataUtilsTest {
     @Test
     public void testClean() throws SQLException, DatabaseUnitException {
         Connection connection = connectionMock();
-        IDatabaseConnection iDatabaseConnection = new DatabaseConnection(connection);
+        IDatabaseConnection dbUnitConnection = new DatabaseConnection(connection);
         Statement stmt = mock(Statement.class);
         when(connection.createStatement()).thenReturn(stmt);
-        clean(connectionAwareTable(CUSTOMERS, iDatabaseConnection));
+        clean(connectionAwareTable(CUSTOMERS, dbUnitConnection));
 
         InOrder inOrder = inOrder(stmt);
         inOrder.verify(stmt).execute("delete from CUSTOMERS");
         inOrder.verify(stmt).close();
+    }
 
+    @Test
+    public void testCleanSeveralTables() throws SQLException, DatabaseUnitException {
+        Connection connection = connectionMock();
+        IDatabaseConnection dbUnitConnection = new DatabaseConnection(connection);
+        Statement stmt = mock(Statement.class);
+        when(connection.createStatement()).thenReturn(stmt);
+        clean(connectionAwareTable(CUSTOMERS, dbUnitConnection), connectionAwareTable(ORDERS, dbUnitConnection));
+
+        InOrder inOrder = inOrder(stmt);
+        inOrder.verify(stmt).execute("delete from CUSTOMERS");
+        inOrder.verify(stmt).close();
+        inOrder.verify(stmt).execute("delete from ORDERS");
+        inOrder.verify(stmt).close();
     }
 
     @Test
     public void testInsert() throws SQLException, DatabaseUnitException {
         Connection connection = connectionMock();
         PreparedStatement pstmt = mock(PreparedStatement.class);
-        IDatabaseConnection iDatabaseConnection = new DatabaseConnection(connection);
+        IDatabaseConnection dbUnitConnection = new DatabaseConnection(connection);
         when(connection.prepareStatement(anyString())).thenReturn(pstmt);
 
-        insert(connectionAwareTable(CUSTOMERS, iDatabaseConnection),
+        insert(connectionAwareTable(CUSTOMERS, dbUnitConnection),
                 row(with(ID, 1), with(FIRST_NAME, "Kit"), with(LAST_NAME, "Debito")));
 
         InOrder inOrder = inOrder(connection, pstmt);
