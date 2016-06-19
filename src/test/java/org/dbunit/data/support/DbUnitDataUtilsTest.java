@@ -48,7 +48,7 @@ public class DbUnitDataUtilsTest {
     private static final Column AGE_COLUMN = new Column(AGE, BIGINT);
 
     @Test
-    public void testWith() {
+    public void test_with() {
         assertThat(with(NAME_COLUMN, "Jane")).isEqualToComparingFieldByField(new Field(NAME, "Jane"));
         assertThat(with(AGE_COLUMN, 25)).isEqualToComparingFieldByField(new Field(AGE, 25));
         assertThat(with(AGE_COLUMN, "25")).isEqualToComparingFieldByField(new Field(AGE, "25"));
@@ -56,7 +56,7 @@ public class DbUnitDataUtilsTest {
     }
 
     @Test
-    public void testCleanInsert() throws Exception {
+    public void test_cleanInsert() throws Exception {
         insert(CUSTOMERS, row().with(ID, 1).with(FIRST_NAME, "Jack").with(LAST_NAME, "Dou"),
                 row().with(ID, 2).with(FIRST_NAME, "Peter").with(LAST_NAME, "Black"),
                 row().with(ID, 3).with(FIRST_NAME, "Kris").with(LAST_NAME, "Nia"));
@@ -64,7 +64,7 @@ public class DbUnitDataUtilsTest {
     }
 
     @Test
-    public void testClean() throws SQLException, DatabaseUnitException {
+    public void test_clean() throws SQLException, DatabaseUnitException {
         Connection connection = connectionMock();
         IDatabaseConnection dbUnitConnection = new DatabaseConnection(connection);
         Statement stmt = mock(Statement.class);
@@ -77,7 +77,7 @@ public class DbUnitDataUtilsTest {
     }
 
     @Test
-    public void testCleanSeveralTables() throws SQLException, DatabaseUnitException {
+    public void test_clean_for_several_tables() throws SQLException, DatabaseUnitException {
         Connection connection = connectionMock();
         IDatabaseConnection dbUnitConnection = new DatabaseConnection(connection);
         Statement stmt = mock(Statement.class);
@@ -92,7 +92,7 @@ public class DbUnitDataUtilsTest {
     }
 
     @Test
-    public void testInsert() throws SQLException, DatabaseUnitException {
+    public void test_insert() throws SQLException, DatabaseUnitException {
         Connection connection = connectionMock();
         PreparedStatement pstmt = mock(PreparedStatement.class);
         IDatabaseConnection dbUnitConnection = new DatabaseConnection(connection);

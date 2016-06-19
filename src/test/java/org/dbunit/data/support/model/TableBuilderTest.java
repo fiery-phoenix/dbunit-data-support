@@ -16,7 +16,7 @@ import static org.dbunit.data.support.tables.SampleTables.CUSTOMERS;
 public class TableBuilderTest {
 
     @Test
-    public void testBuild() throws Exception {
+    public void test_dataset_generation() throws Exception {
         Assertion.assertEquals(getCustomersDataSetFromXml(),
                 new TableBuilder(
                         row().with(ID, 1).with(FIRST_NAME, "Jack").with(LAST_NAME, "Dou"),
