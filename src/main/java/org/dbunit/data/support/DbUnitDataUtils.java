@@ -3,7 +3,7 @@ package org.dbunit.data.support;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.data.support.exceptions.DbUnitRuntimeException;
 import org.dbunit.data.support.model.ConnectionAwareTable;
-import org.dbunit.data.support.model.Row;
+import org.dbunit.data.support.model.RowBuilder;
 import org.dbunit.data.support.model.TableBuilder;
 import org.dbunit.data.support.model.Field;
 import org.dbunit.database.IDatabaseConnection;
@@ -33,8 +33,8 @@ public final class DbUnitDataUtils {
         return new Field(column.getColumnName(), null);
     }
 
-    public static Row row(Field... fields) {
-        return new Row(fields);
+    public static RowBuilder row() {
+        return new RowBuilder();
     }
 
     public static ITable getTable(ConnectionAwareTable table) {
@@ -54,15 +54,15 @@ public final class DbUnitDataUtils {
         Arrays.stream(tables).forEach(DbUnitDataUtils::clean);
     }
 
-    public static void cleanInsert(ConnectionAwareTable table, Row... rows) {
+    public static void cleanInsert(ConnectionAwareTable table, RowBuilder... rows) {
         executeOperation(CLEAN_INSERT, table, rows);
     }
 
-    public static void insert(ConnectionAwareTable table, Row... rows) {
+    public static void insert(ConnectionAwareTable table, RowBuilder... rows) {
         executeOperation(INSERT, table, rows);
     }
 
-    private static void executeOperation(DatabaseOperation dbUnitOperation, ConnectionAwareTable table, Row... rows) {
+    private static void executeOperation(DatabaseOperation dbUnitOperation, ConnectionAwareTable table, RowBuilder... rows) {
         executeOperation(dbUnitOperation, table.getConnection(), new TableBuilder(rows).build(table));
     }
 

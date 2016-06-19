@@ -9,12 +9,14 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import static java.util.Arrays.stream;
+
 public class TableBuilder {
 
     private final List<Row> rows = new LinkedList<>();
 
-    public TableBuilder(Row... rows) {
-        Collections.addAll(this.rows, rows);
+    public TableBuilder(RowBuilder... rows) {
+        Collections.addAll(this.rows, stream(rows).map(RowBuilder::build).toArray(Row[]::new));
     }
 
     public IDataSet build(Table table) {

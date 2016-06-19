@@ -57,9 +57,9 @@ public class DbUnitDataUtilsTest {
 
     @Test
     public void testCleanInsert() throws Exception {
-        cleanInsert(CUSTOMERS, row(with(ID, 1), with(FIRST_NAME, "Jack"), with(LAST_NAME, "Dou")),
-                row(with(ID, 2), with(FIRST_NAME, "Peter"), with(LAST_NAME, "Black")),
-                row(with(ID, 3), with(FIRST_NAME, "Kris"), with(LAST_NAME, "Nia")));
+        insert(CUSTOMERS, row().with(ID, 1).with(FIRST_NAME, "Jack").with(LAST_NAME, "Dou"),
+                row().with(ID, 2).with(FIRST_NAME, "Peter").with(LAST_NAME, "Black"),
+                row().with(ID, 3).with(FIRST_NAME, "Kris").with(LAST_NAME, "Nia"));
         Assertion.assertEquals(getCustomersTableFromXml(), getTable(CUSTOMERS));
     }
 
@@ -99,7 +99,7 @@ public class DbUnitDataUtilsTest {
         when(connection.prepareStatement(anyString())).thenReturn(pstmt);
 
         insert(connectionAwareTable(CUSTOMERS, dbUnitConnection),
-                row(with(ID, 1), with(FIRST_NAME, "Kit"), with(LAST_NAME, "Debito")));
+                row().with(ID, 1).with(FIRST_NAME, "Kit").with(LAST_NAME, "Debito"));
 
         InOrder inOrder = inOrder(connection, pstmt);
         inOrder.verify(connection, times(1)).prepareStatement("insert into CUSTOMERS (ID, FIRST_NAME, LAST_NAME) values (?, ?, ?)");
