@@ -1,7 +1,11 @@
 package org.dbunit.data.support.model;
 
 import org.dbunit.data.support.exceptions.DbUnitRuntimeException;
-import org.dbunit.dataset.*;
+import org.dbunit.dataset.CachedDataSet;
+import org.dbunit.dataset.DataSetException;
+import org.dbunit.dataset.DefaultTableMetaData;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.ITableMetaData;
 import org.dbunit.dataset.stream.BufferedConsumer;
 import org.dbunit.dataset.stream.IDataSetConsumer;
 

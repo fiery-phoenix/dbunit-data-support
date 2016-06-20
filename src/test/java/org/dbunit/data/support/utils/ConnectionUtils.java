@@ -21,13 +21,14 @@ public final class ConnectionUtils {
     private static final String JDBC_URL = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1";
     private static final String USER = "sa";
     private static final String PASSWORD = "";
+    private static final String SCHEMA = "TASKS";
 
     private static final IDatabaseConnection connection = createConnection();
 
     private static IDatabaseConnection createConnection() {
         try {
             createSchema();
-            return new JdbcDatabaseTester(JDBC_DRIVER, JDBC_URL, USER, PASSWORD).getConnection();
+            return new JdbcDatabaseTester(JDBC_DRIVER, JDBC_URL, USER, PASSWORD, SCHEMA).getConnection();
         } catch (Exception e) {
             throw new DbUnitRuntimeException(e);
         }

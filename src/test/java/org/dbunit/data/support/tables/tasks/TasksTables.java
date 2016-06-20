@@ -1,4 +1,4 @@
-package org.dbunit.data.support.tables;
+package org.dbunit.data.support.tables.tasks;
 
 import org.dbunit.data.support.model.ConnectionAwareTable;
 import org.dbunit.data.support.utils.ConnectionUtils;
@@ -7,16 +7,19 @@ import org.dbunit.dataset.Column;
 
 import java.util.Arrays;
 
-public enum SampleTables implements ConnectionAwareTable {
+public enum TasksTables implements ConnectionAwareTable {
 
-    CUSTOMERS("CUSTOMERS", Customers.getColumns()),
-    ORDERS("ORDERS", Orders.getColumns());
+    USERS("USERS", Users.getColumns()),
+    LISTS("LISTS", Lists.getColumns()),
+    TASKS("TASKS", Tasks.getColumns()),
+    SHARED_LISTS("SHARED_LISTS", SharedLists.getColumns()),
+    PACKAGES("PACKAGES", Packages.getColumns());
 
     private final String name;
 
     private final Column[] columns;
 
-    SampleTables(String name, Column[] columns) {
+    TasksTables(String name, Column[] columns) {
         this.name = name;
         this.columns = columns;
     }
@@ -36,4 +39,5 @@ public enum SampleTables implements ConnectionAwareTable {
     public IDatabaseConnection getConnection() {
         return ConnectionUtils.getConnection();
     }
+
 }

@@ -8,24 +8,24 @@ import org.junit.Test;
 import java.io.File;
 
 import static org.dbunit.data.support.DbUnitDataUtils.row;
-import static org.dbunit.data.support.tables.Customers.FIRST_NAME;
-import static org.dbunit.data.support.tables.Customers.ID;
-import static org.dbunit.data.support.tables.Customers.LAST_NAME;
-import static org.dbunit.data.support.tables.SampleTables.CUSTOMERS;
+import static org.dbunit.data.support.tables.tasks.TasksTables.USERS;
+import static org.dbunit.data.support.tables.tasks.Users.ID;
+import static org.dbunit.data.support.tables.tasks.Users.LOGIN;
+import static org.dbunit.data.support.tables.tasks.Users.NAME;
 
 public class TableBuilderTest {
 
     @Test
     public void test_dataset_generation() throws Exception {
-        Assertion.assertEquals(getCustomersDataSetFromXml(),
+        Assertion.assertEquals(getUsersDataSetFromXml(),
                 new TableBuilder(
-                        row().with(ID, 1).with(FIRST_NAME, "Jack").with(LAST_NAME, "Dou"),
-                        row().with(ID, 2).with(FIRST_NAME, "Peter").with(LAST_NAME, "Black"),
-                        row().with(ID, 3).with(FIRST_NAME, "Kris").with(LAST_NAME, "Nia")
-                ).build(CUSTOMERS));
+                        row().with(ID, 1).with(LOGIN, "kit").with(NAME, "Sophi"),
+                        row().with(ID, 2).with(LOGIN, "gray").with(NAME, "Shellena"),
+                        row().with(ID, 3).with(LOGIN, "pawel").with(NAME, "Pawel Dou")
+                ).build(USERS));
     }
 
-    private IDataSet getCustomersDataSetFromXml() throws Exception {
-        return new FlatXmlDataSetBuilder().build(new File("src/test/resources/customersSampleData.xml"));
+    private IDataSet getUsersDataSetFromXml() throws Exception {
+        return new FlatXmlDataSetBuilder().build(new File("src/test/resources/usersSampleData.xml"));
     }
 }

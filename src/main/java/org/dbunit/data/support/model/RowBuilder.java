@@ -14,6 +14,11 @@ public class RowBuilder {
         return this;
     }
 
+    public RowBuilder withNull(Column column) {
+        data.put(column.getColumnName(), null);
+        return this;
+    }
+
     public Row build() {
         return new Row(data);
     }

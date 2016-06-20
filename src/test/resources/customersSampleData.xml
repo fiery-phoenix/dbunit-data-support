@@ -1,6 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-    <CUSTOMERS ID="1" FIRST_NAME="Jack" LAST_NAME="Dou"/>
-    <CUSTOMERS ID="2" FIRST_NAME="Peter" LAST_NAME="Black"/>
-    <CUSTOMERS ID="3" FIRST_NAME="Kris" LAST_NAME="Nia"/>
-</dataset>

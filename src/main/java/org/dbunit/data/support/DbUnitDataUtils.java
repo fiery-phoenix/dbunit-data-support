@@ -5,9 +5,7 @@ import org.dbunit.data.support.exceptions.DbUnitRuntimeException;
 import org.dbunit.data.support.model.ConnectionAwareTable;
 import org.dbunit.data.support.model.RowBuilder;
 import org.dbunit.data.support.model.TableBuilder;
-import org.dbunit.data.support.model.Field;
 import org.dbunit.database.IDatabaseConnection;
-import org.dbunit.dataset.Column;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
@@ -23,14 +21,6 @@ import static org.dbunit.operation.DatabaseOperation.INSERT;
 public final class DbUnitDataUtils {
 
     private DbUnitDataUtils() {
-    }
-
-    public static Field with(Column column, Object value) {
-        return new Field(column.getColumnName(), value);
-    }
-
-    public static Field withNull(Column column) {
-        return new Field(column.getColumnName(), null);
     }
 
     public static RowBuilder row() {
