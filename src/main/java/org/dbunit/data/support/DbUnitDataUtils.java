@@ -27,6 +27,10 @@ public final class DbUnitDataUtils {
         return new RowBuilder();
     }
 
+    public static RowBuilder row(RowBuilder template) {
+        return new RowBuilder(template);
+    }
+
     public static ITable getTable(ConnectionAwareTable table) {
         try {
             IDataSet actualDataSet = table.getConnection().createDataSet(new String[]{table.getName()});
