@@ -4,8 +4,10 @@ import org.dbunit.DatabaseUnitException;
 import org.dbunit.data.support.exceptions.DbUnitRuntimeException;
 import org.dbunit.data.support.model.ConnectionAwareTable;
 import org.dbunit.data.support.model.RowBuilder;
+import org.dbunit.data.support.model.RowsBuilderByColumns;
 import org.dbunit.data.support.model.TableBuilder;
 import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.Column;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
@@ -31,6 +33,10 @@ public final class DbUnitDataUtils {
         return new RowBuilder(template);
     }
 
+    public static RowsBuilderByColumns columns(Column... columns) {
+        return new RowsBuilderByColumns(columns);
+    }
+
     public static ITable getTable(ConnectionAwareTable table) {
         try {
             IDataSet actualDataSet = table.getConnection().createDataSet(new String[]{table.getName()});
@@ -54,6 +60,18 @@ public final class DbUnitDataUtils {
 
     public static void insert(ConnectionAwareTable table, RowBuilder... rows) {
         executeOperation(INSERT, table, rows);
+    }
+
+    public static void cleanInsert(ConnectionAwareTable table, RowsBuilderByColumns rows) {
+        executeOperation(CLEAN_INSERT, table, rows);
+    }
+
+    public static void insert(ConnectionAwareTable table, RowsBuilderByColumns rows) {
+        executeOperation(INSERT, table, rows);
+    }
+
+    private static void executeOperation(DatabaseOperation dbUnitOperation, ConnectionAwareTable table, RowsBuilderByColumns rows) {
+        executeOperation(dbUnitOperation, table.getConnection(), new TableBuilder(rows).build(table));
     }
 
     private static void executeOperation(DatabaseOperation dbUnitOperation, ConnectionAwareTable table, RowBuilder... rows) {

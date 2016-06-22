@@ -15,6 +15,13 @@ public class Row {
         this.data = new HashMap<>(data);
     }
 
+    public Row(String[] columnsNames, Object[] values) {
+        this.data = new HashMap<>();
+        for (int i = 0; i < columnsNames.length; i++) {
+            data.put(columnsNames[i], values[i]);
+        }
+    }
+
     private Object getValue(Column column) {
         return data.get(column.getColumnName());
     }

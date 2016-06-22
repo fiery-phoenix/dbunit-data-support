@@ -23,6 +23,10 @@ public class TableBuilder {
         Collections.addAll(this.rows, stream(rows).map(RowBuilder::build).toArray(Row[]::new));
     }
 
+    public TableBuilder(RowsBuilderByColumns rows) {
+        Collections.addAll(this.rows, rows.build());
+    }
+
     public IDataSet build(Table table) {
         CachedDataSet dataSet = new CachedDataSet();
         IDataSetConsumer consumer = new BufferedConsumer(dataSet);

@@ -17,6 +17,7 @@ import java.sql.Statement;
 
 import static org.dbunit.data.support.DbUnitDataUtils.clean;
 import static org.dbunit.data.support.DbUnitDataUtils.cleanInsert;
+import static org.dbunit.data.support.DbUnitDataUtils.columns;
 import static org.dbunit.data.support.DbUnitDataUtils.insert;
 import static org.dbunit.data.support.DbUnitDataUtils.row;
 import static org.dbunit.data.support.DbUnitDataUtils.getTable;
@@ -42,6 +43,16 @@ public class DbUnitDataUtilsTest {
                 row().with(ID, 3).with(LOGIN, "pawel").with(NAME, "Pawel Dou"));
         Assertion.assertEquals(getUsersTableFromXml(), getTable(USERS));
     }
+
+    @Test
+    public void test_cleanInsert_for_columns_notation() throws Exception {
+        cleanInsert(USERS, columns(ID, LOGIN, NAME)
+                .values(1, "kit", "Sophi")
+                .values(2, "gray", "Shellena")
+                .values(3, "pawel", "Pawel Dou"));
+        Assertion.assertEquals(getUsersTableFromXml(), getTable(USERS));
+    }
+
 
     @Test
     public void test_clean() throws SQLException, DatabaseUnitException {
@@ -90,6 +101,24 @@ public class DbUnitDataUtilsTest {
         inOrder.verify(pstmt).close();
     }
 
+    @Test
+    public void test_insert_with_columns_notation() throws SQLException, DatabaseUnitException {
+        Connection connection = connectionMock();
+        PreparedStatement pstmt = mock(PreparedStatement.class);
+        IDatabaseConnection dbUnitConnection = new DatabaseConnection(connection);
+        when(connection.prepareStatement(anyString())).thenReturn(pstmt);
+
+        insert(connectionAwareTable(USERS, dbUnitConnection),
+                columns(ID, LOGIN, NAME).values(1, "kit", "Sophi"));
+
+        InOrder inOrder = inOrder(connection, pstmt);
+        inOrder.verify(connection, times(1)).prepareStatement("insert into USERS (ID, LOGIN, NAME) values (?, ?, ?)");
+        inOrder.verify(pstmt).setInt(1, 1);
+        inOrder.verify(pstmt).setString(2, "kit");
+        inOrder.verify(pstmt).setString(3, "Sophi");
+        inOrder.verify(pstmt).execute();
+        inOrder.verify(pstmt).close();
+    }
 
     private ITable getUsersTableFromXml() throws Exception {
         return new FlatXmlDataSetBuilder().build(new File("src/test/resources/usersSampleData.xml"))
