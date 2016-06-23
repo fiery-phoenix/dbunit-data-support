@@ -9,6 +9,7 @@ import org.dbunit.dataset.ITableMetaData;
 import org.dbunit.dataset.stream.BufferedConsumer;
 import org.dbunit.dataset.stream.IDataSetConsumer;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,8 +20,8 @@ public class TableBuilder {
 
     private final List<Row> rows = new LinkedList<>();
 
-    public TableBuilder(RowBuilder... rows) {
-        Collections.addAll(this.rows, stream(rows).map(RowBuilder::build).toArray(Row[]::new));
+    public TableBuilder(RowsBuilder... rows) {
+        Collections.addAll(this.rows, stream(rows).map(RowsBuilder::build).flatMap(Arrays::stream).toArray(Row[]::new));
     }
 
     public TableBuilder(RowsBuilderByColumns rows) {

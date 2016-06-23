@@ -15,6 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import static org.dbunit.data.support.DbUnitAssertions.assertSize;
 import static org.dbunit.data.support.DbUnitDataUtils.clean;
 import static org.dbunit.data.support.DbUnitDataUtils.cleanInsert;
 import static org.dbunit.data.support.DbUnitDataUtils.columns;
@@ -42,6 +43,12 @@ public class DbUnitDataUtilsTest {
                 row().with(ID, 2).with(LOGIN, "gray").with(NAME, "Shellena"),
                 row().with(ID, 3).with(LOGIN, "pawel").with(NAME, "Pawel Dou"));
         Assertion.assertEquals(getUsersTableFromXml(), getTable(USERS));
+    }
+
+    @Test
+    public void test_cleanInsert_with_repeating_row() throws Exception {
+        cleanInsert(USERS, row().times(4).with(LOGIN, "kit").with(NAME, "Shellena"));
+        assertSize(USERS, 4);
     }
 
     @Test

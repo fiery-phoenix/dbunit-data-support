@@ -35,7 +35,7 @@ public final class ConnectionUtils {
     }
 
     public static void createSchema() throws SQLException {
-        RunScript.execute(JDBC_URL, USER, PASSWORD, "src/test/resources/schema.sql", Charset.defaultCharset(), false);
+        RunScript.execute(JDBC_URL, USER, PASSWORD, "src/test/resources/tasks_schema.sql", Charset.defaultCharset(), false);
     }
 
     public static IDatabaseConnection getConnection() {

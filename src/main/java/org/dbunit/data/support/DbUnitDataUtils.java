@@ -3,7 +3,7 @@ package org.dbunit.data.support;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.data.support.exceptions.DbUnitRuntimeException;
 import org.dbunit.data.support.model.ConnectionAwareTable;
-import org.dbunit.data.support.model.RowBuilder;
+import org.dbunit.data.support.model.RowsBuilder;
 import org.dbunit.data.support.model.RowsBuilderByColumns;
 import org.dbunit.data.support.model.TableBuilder;
 import org.dbunit.database.IDatabaseConnection;
@@ -25,12 +25,12 @@ public final class DbUnitDataUtils {
     private DbUnitDataUtils() {
     }
 
-    public static RowBuilder row() {
-        return new RowBuilder();
+    public static RowsBuilder row() {
+        return new RowsBuilder();
     }
 
-    public static RowBuilder row(RowBuilder template) {
-        return new RowBuilder(template);
+    public static RowsBuilder row(RowsBuilder template) {
+        return new RowsBuilder(template);
     }
 
     public static RowsBuilderByColumns columns(Column... columns) {
@@ -54,11 +54,11 @@ public final class DbUnitDataUtils {
         Arrays.stream(tables).forEach(DbUnitDataUtils::clean);
     }
 
-    public static void cleanInsert(ConnectionAwareTable table, RowBuilder... rows) {
+    public static void cleanInsert(ConnectionAwareTable table, RowsBuilder... rows) {
         executeOperation(CLEAN_INSERT, table, rows);
     }
 
-    public static void insert(ConnectionAwareTable table, RowBuilder... rows) {
+    public static void insert(ConnectionAwareTable table, RowsBuilder... rows) {
         executeOperation(INSERT, table, rows);
     }
 
@@ -74,7 +74,7 @@ public final class DbUnitDataUtils {
         executeOperation(dbUnitOperation, table.getConnection(), new TableBuilder(rows).build(table));
     }
 
-    private static void executeOperation(DatabaseOperation dbUnitOperation, ConnectionAwareTable table, RowBuilder... rows) {
+    private static void executeOperation(DatabaseOperation dbUnitOperation, ConnectionAwareTable table, RowsBuilder... rows) {
         executeOperation(dbUnitOperation, table.getConnection(), new TableBuilder(rows).build(table));
     }
 
