@@ -8,7 +8,7 @@ import java.util.List;
 
 import static java.util.Arrays.stream;
 
-public class RowsBuilderByColumns {
+public class RowsBuilderByColumns implements RowsBuilder {
 
     private final String[] columnsNames;
 
@@ -25,6 +25,7 @@ public class RowsBuilderByColumns {
         return this;
     }
 
+    @Override
     public Row[] build() {
         return rows.stream().map(values -> new Row(columnsNames, values)).toArray(Row[]::new);
     }

@@ -47,7 +47,7 @@ public class DbUnitDataUtilsTest {
 
     @Test
     public void test_cleanInsert_with_repeating_row() throws Exception {
-        cleanInsert(USERS, row().times(4).with(LOGIN, "kit").with(NAME, "Shellena"));
+        cleanInsert(USERS, row().with(LOGIN, "kit").with(NAME, "Shellena").times(4));
         assertSize(USERS, 4);
     }
 
