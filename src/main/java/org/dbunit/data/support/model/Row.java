@@ -23,7 +23,8 @@ public class Row {
     }
 
     private Object getValue(Column column) {
-        return data.get(column.getColumnName());
+        String columnName = column.getColumnName();
+        return data.containsKey(columnName) ? data.get(columnName) : column.getDefaultValue();
     }
 
     public Object[] getValues(ITableMetaData metaData) throws DataSetException {

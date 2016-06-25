@@ -15,6 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.dbunit.data.support.DbUnitAssertions.assertSize;
 import static org.dbunit.data.support.DbUnitDataUtils.cleanInsert;
 import static org.dbunit.data.support.DbUnitDataUtils.columns;
@@ -47,7 +48,7 @@ public class DbUnitDataUtilsTest {
 
     @Test
     public void test_cleanInsert_with_repeating_row() throws Exception {
-        cleanInsert(USERS, row().with(LOGIN, "kit").with(NAME, "Shellena").times(4));
+        cleanInsert(USERS, row().with(NAME, "Shellena").times(4));
         assertSize(USERS, 4);
     }
 
@@ -59,7 +60,6 @@ public class DbUnitDataUtilsTest {
                 .values(3, "pawel", "Pawel Dou"));
         Assertion.assertEquals(getUsersTableFromXml(), getTable(USERS));
     }
-
 
     @Test
     public void test_clean() throws SQLException, DatabaseUnitException {
@@ -125,6 +125,16 @@ public class DbUnitDataUtilsTest {
         inOrder.verify(pstmt).setString(3, "Sophi");
         inOrder.verify(pstmt).execute();
         inOrder.verify(pstmt).close();
+    }
+
+    @Test
+    public void not_nullable_generatable_columns_are_inserted() {
+        cleanInsert(USERS, row().times(4));
+        assertSize(USERS, 4);
+
+        assertThatThrownBy(() -> cleanInsert(USERS, row().withNull(LOGIN))).hasCauseInstanceOf(DatabaseUnitException.class);
+        assertThatThrownBy(() -> cleanInsert(USERS, row().with(LOGIN, "test").times(2)))
+                .hasCauseInstanceOf(DatabaseUnitException.class);
     }
 
     private ITable getUsersTableFromXml() throws Exception {
