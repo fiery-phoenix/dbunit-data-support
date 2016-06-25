@@ -47,12 +47,12 @@ public final class DbUnitDataUtils {
         }
     }
 
-    public static void clean(ConnectionAwareTable table) {
+    public static void deleteFrom(ConnectionAwareTable table) {
         executeOperation(DELETE_ALL, table);
     }
 
-    public static void clean(ConnectionAwareTable... tables) {
-        Arrays.stream(tables).forEach(DbUnitDataUtils::clean);
+    public static void deleteFrom(ConnectionAwareTable... tables) {
+        Arrays.stream(tables).forEach(DbUnitDataUtils::deleteFrom);
     }
 
     public static void cleanInsert(ConnectionAwareTable table, RowsBuilder... rows) {

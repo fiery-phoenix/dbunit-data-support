@@ -16,9 +16,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import static org.dbunit.data.support.DbUnitAssertions.assertSize;
-import static org.dbunit.data.support.DbUnitDataUtils.clean;
 import static org.dbunit.data.support.DbUnitDataUtils.cleanInsert;
 import static org.dbunit.data.support.DbUnitDataUtils.columns;
+import static org.dbunit.data.support.DbUnitDataUtils.deleteFrom;
 import static org.dbunit.data.support.DbUnitDataUtils.insert;
 import static org.dbunit.data.support.DbUnitDataUtils.row;
 import static org.dbunit.data.support.DbUnitDataUtils.getTable;
@@ -67,7 +67,7 @@ public class DbUnitDataUtilsTest {
         IDatabaseConnection dbUnitConnection = new DatabaseConnection(connection);
         Statement stmt = mock(Statement.class);
         when(connection.createStatement()).thenReturn(stmt);
-        clean(connectionAwareTable(USERS, dbUnitConnection));
+        deleteFrom(connectionAwareTable(USERS, dbUnitConnection));
 
         InOrder inOrder = inOrder(stmt);
         inOrder.verify(stmt).execute("delete from USERS");
@@ -75,12 +75,12 @@ public class DbUnitDataUtilsTest {
     }
 
     @Test
-    public void test_clean_for_several_tables() throws SQLException, DatabaseUnitException {
+    public void test_deleteFrom_for_several_tables() throws SQLException, DatabaseUnitException {
         Connection connection = connectionMock();
         IDatabaseConnection dbUnitConnection = new DatabaseConnection(connection);
         Statement stmt = mock(Statement.class);
         when(connection.createStatement()).thenReturn(stmt);
-        clean(connectionAwareTable(USERS, dbUnitConnection), connectionAwareTable(LISTS, dbUnitConnection));
+        DbUnitDataUtils.deleteFrom(connectionAwareTable(USERS, dbUnitConnection), connectionAwareTable(LISTS, dbUnitConnection));
 
         InOrder inOrder = inOrder(stmt);
         inOrder.verify(stmt).execute("delete from USERS");
