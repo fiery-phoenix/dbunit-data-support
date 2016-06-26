@@ -5,6 +5,7 @@ import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.ITableMetaData;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Row {
@@ -15,10 +16,10 @@ public class Row {
         this.data = new HashMap<>(data);
     }
 
-    public Row(String[] columnsNames, Object[] values) {
+    public Row(String[] columnsNames, List<?> values) {
         this.data = new HashMap<>();
         for (int i = 0; i < columnsNames.length; i++) {
-            data.put(columnsNames[i], values[i]);
+            data.put(columnsNames[i], values.get(i));
         }
     }
 

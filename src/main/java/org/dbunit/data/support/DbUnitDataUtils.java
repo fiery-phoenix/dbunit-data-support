@@ -38,6 +38,10 @@ public final class DbUnitDataUtils {
         return new RowsBuilderByColumns(columns);
     }
 
+    public static RowsBuilderByColumns columns(String... columnsNames) {
+        return new RowsBuilderByColumns(columnsNames);
+    }
+
     public static ITable getTable(ConnectionAwareTable table) {
         try {
             IDataSet actualDataSet = table.getConnection().createDataSet(new String[]{table.getName()});

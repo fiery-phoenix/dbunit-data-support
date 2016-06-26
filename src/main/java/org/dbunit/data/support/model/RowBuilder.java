@@ -22,8 +22,18 @@ public class RowBuilder implements RowsBuilder {
         return this;
     }
 
+    public RowBuilder with(String columnName, Object value) {
+        data.put(columnName, value);
+        return this;
+    }
+
     public RowBuilder withNull(Column column) {
         data.put(column.getColumnName(), null);
+        return this;
+    }
+
+    public RowBuilder withNull(String columnName) {
+        data.put(columnName, null);
         return this;
     }
 

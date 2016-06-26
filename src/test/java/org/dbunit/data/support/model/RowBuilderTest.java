@@ -19,4 +19,10 @@ public class RowBuilderTest {
         assertThat(templateRow).isEqualTo(row().with(ID, 1).with(NAME, "Test"));
     }
 
+    @Test
+    public void row_can_be_constructed_with_string_columns_names() {
+        assertThat(row().with("ID", 1).with("LOGIN", "test").withNull("NAME"))
+                .isEqualTo(row().with(ID, 1).with(LOGIN, "test").withNull(NAME));
+    }
+
 }

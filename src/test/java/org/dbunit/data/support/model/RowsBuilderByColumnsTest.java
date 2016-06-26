@@ -2,6 +2,7 @@ package org.dbunit.data.support.model;
 
 import org.junit.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.dbunit.data.support.DbUnitDataUtils.columns;
 import static org.dbunit.data.support.tables.tasks.Users.ID;
@@ -16,6 +17,12 @@ public class RowsBuilderByColumnsTest {
                 .values(1, "kit", "Sophi", "extra value")).isInstanceOf(IllegalArgumentException.class);
         assertThatThrownBy(() -> columns(ID, LOGIN, NAME)
                 .values(1, "kit")).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    public void rows_can_be_constructed_with_string_columns_names() {
+        assertThat(columns("ID", "LOGIN", "NAME").values(1, "test", "Test"))
+                .isEqualTo(columns(ID, LOGIN, NAME).values(1, "test", "Test"));
     }
 
 }
