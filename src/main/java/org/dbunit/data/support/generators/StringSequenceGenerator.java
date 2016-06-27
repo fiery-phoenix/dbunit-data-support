@@ -34,4 +34,27 @@ public class StringSequenceGenerator implements ValueGenerator<String> {
     public String next() {
         return prefix + longSequenceGenerator.next();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        StringSequenceGenerator that = (StringSequenceGenerator) o;
+
+        return prefix.equals(that.prefix) && longSequenceGenerator.equals(that.longSequenceGenerator);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = prefix.hashCode();
+        result = 31 * result + longSequenceGenerator.hashCode();
+
+        return result;
+    }
 }

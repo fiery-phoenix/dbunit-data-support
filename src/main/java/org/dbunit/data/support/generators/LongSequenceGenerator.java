@@ -30,4 +30,26 @@ public class LongSequenceGenerator implements ValueGenerator<Long> {
 
         return nextValue;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        LongSequenceGenerator that = (LongSequenceGenerator) o;
+
+        return current == that.current && increment == that.increment;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (current ^ (current >>> 32));
+        result = 31 * result + (int) (increment ^ (increment >>> 32));
+
+        return result;
+    }
 }
