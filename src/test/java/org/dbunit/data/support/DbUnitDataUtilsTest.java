@@ -53,6 +53,12 @@ public class DbUnitDataUtilsTest {
     }
 
     @Test
+    public void test_cleanInsert_with_repeating_columns_values() throws Exception {
+        cleanInsert(USERS, columns(NAME).repeatingValues("Shellena").times(4));
+        assertSize(USERS, 4);
+    }
+
+    @Test
     public void test_cleanInsert_for_columns_notation() throws Exception {
         cleanInsert(USERS, columns(ID, LOGIN, NAME)
                 .values(1, "kit", "Sophi")

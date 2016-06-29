@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.generate;
 
 public class RowsBuilderByColumns implements RowsBuilder {
 
@@ -24,10 +26,19 @@ public class RowsBuilderByColumns implements RowsBuilder {
     }
 
     public RowsBuilderByColumns values(Object... values) {
-        Preconditions.checkArgument(columnsNames.length == values.length, "The number of values doesn't match the number of columns");
+        checkValuesNumber(values.length);
         rows.add(Arrays.asList(values));
 
         return this;
+    }
+
+    public RepeatedColumnsValuesBuilder repeatingValues(Object... values) {
+        checkValuesNumber(values.length);
+        return new RepeatedColumnsValuesBuilder(this, Arrays.asList(values));
+    }
+
+    private void checkValuesNumber(int length) {
+        Preconditions.checkArgument(columnsNames.length == length, "The number of values doesn't match the number of columns");
     }
 
     @Override
@@ -56,4 +67,23 @@ public class RowsBuilderByColumns implements RowsBuilder {
 
         return result;
     }
+
+    public static class RepeatedColumnsValuesBuilder {
+
+        private final RowsBuilderByColumns rowsBuilder;
+        private final List<?> values;
+
+        private RepeatedColumnsValuesBuilder(RowsBuilderByColumns rowsBuilder, List<?> values) {
+            this.rowsBuilder = rowsBuilder;
+            this.values = values;
+        }
+
+        public RowsBuilderByColumns times(int times) {
+            Preconditions.checkArgument(times > 0, "The number of repeating values must be > 0");
+            rowsBuilder.rows.addAll(generate(() -> values).limit(times).collect(toList()));
+
+            return rowsBuilder;
+        }
+    }
+
 }
