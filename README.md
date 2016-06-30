@@ -53,7 +53,6 @@ Java API to build and populate tables data sets for dbunit (*not a unique implem
     - values generation present in table description
     - values generation passed to [template] row definition, before columns values definition
 - For now there is support only for ConnectionAwareTable, need to change this
-- Add check for using not existing columns in table definition
 
 ### Some ideas
 * Snapshot of data sets in different formats

@@ -2,10 +2,10 @@ package org.dbunit.data.support.model;
 
 import org.dbunit.data.support.exceptions.DbUnitRuntimeException;
 import org.dbunit.dataset.CachedDataSet;
+import org.dbunit.dataset.Column;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.DefaultTableMetaData;
 import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.ITableMetaData;
 import org.dbunit.dataset.stream.BufferedConsumer;
 import org.dbunit.dataset.stream.IDataSetConsumer;
 
@@ -27,7 +27,8 @@ public class TableBuilder {
     public IDataSet build(Table table) {
         CachedDataSet dataSet = new CachedDataSet();
         IDataSetConsumer consumer = new BufferedConsumer(dataSet);
-        ITableMetaData metaData = new DefaultTableMetaData(table.getName(), table.getColumns());
+        Column[] columns = table.getColumns();
+        VerifiableTableMetaData metaData = new VerifiableTableMetaData(new DefaultTableMetaData(table.getName(), columns));
         try {
             consumer.startTable(metaData);
             for (Row row : rows) {

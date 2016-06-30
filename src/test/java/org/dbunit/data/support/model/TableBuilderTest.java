@@ -1,5 +1,6 @@
 package org.dbunit.data.support.model;
 
+import org.assertj.core.api.Assertions;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
@@ -12,6 +13,7 @@ import static org.dbunit.data.support.DbUnitDataUtils.columns;
 import static org.dbunit.data.support.DbUnitDataUtils.row;
 import static org.dbunit.data.support.generators.ValueGenerators.sequence;
 import static org.dbunit.data.support.generators.ValueGenerators.stringSequence;
+import static org.dbunit.data.support.tables.tasks.Lists.SUMMARY;
 import static org.dbunit.data.support.tables.tasks.TasksTables.USERS;
 import static org.dbunit.data.support.tables.tasks.Users.ID;
 import static org.dbunit.data.support.tables.tasks.Users.LOGIN;
@@ -70,6 +72,17 @@ public class TableBuilderTest {
                         row(template).with(LOGIN, "other"),
                         row(template)
                 ).build(USERS));
+    }
+
+    @Test
+    public void fails_to_build_table_with_wrong_columns() {
+        Assertions.assertThatThrownBy(() -> new TableBuilder(
+                row().with(ID, 1).with(LOGIN, "t1").with(SUMMARY, "summary").with("TEST", 5)
+        ).build(USERS)).isInstanceOf(IllegalArgumentException.class);
+
+        Assertions.assertThatThrownBy(() -> new TableBuilder(
+                row().with(ID, 1).with(LOGIN, "t1").withGenerated(SUMMARY, sequence())
+        ).build(USERS)).isInstanceOf(IllegalArgumentException.class);
     }
 
     private IDataSet getUsersDataSetFromXml() throws Exception {
