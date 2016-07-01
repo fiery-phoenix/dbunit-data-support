@@ -7,6 +7,7 @@ import org.dbunit.dataset.DataSetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
 import static java.util.stream.Stream.concat;
@@ -21,12 +22,13 @@ public class Row {
         this.valueGenerators = new HashMap<>(valueGenerators);
     }
 
-    public Row(String[] columnsNames, List<?> values) {
+    public Row(Set<String> columnsNames, List<?> values, Map<String, ValueGenerator<?>> valueGenerators) {
         this.data = new HashMap<>();
-        for (int i = 0; i < columnsNames.length; i++) {
-            data.put(columnsNames[i], values.get(i));
+        int i = 0;
+        for (String columnName : columnsNames) {
+            data.put(columnName, values.get(i++));
         }
-        valueGenerators = new HashMap<>();
+        this.valueGenerators = valueGenerators;
     }
 
     private Object getValue(Column column) {

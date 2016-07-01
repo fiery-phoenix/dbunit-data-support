@@ -57,6 +57,18 @@ public class TableBuilderTest {
                 new TableBuilder(
                         row().withGenerated(ID, sequence(5, 5)).withGenerated(LOGIN, stringSequence("login")).times(2)
                 ).build(USERS));
+
+
+        assertEquals(new TableBuilder(columns(ID, LOGIN, NAME)
+                        .values(5, "login1", "Gray")
+                        .values(7, "login2", "Gray")
+                ).build(USERS),
+                new TableBuilder(columns(ID)
+                        .values(5)
+                        .values(7)
+                        .witDefault(NAME, "Gray")
+                        .withGenerated(LOGIN, stringSequence("login"))
+                ).build(USERS));
     }
 
     @Test

@@ -1,28 +1,36 @@
 package org.dbunit.data.support.model;
 
+import org.dbunit.data.support.generators.ValueGenerator;
 import org.dbunit.data.support.utils.Preconditions;
 import org.dbunit.dataset.Column;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.generate;
+import static org.dbunit.data.support.generators.ValueGenerators.constant;
 
 public class RowsBuilderByColumns implements RowsBuilder {
 
-    private final String[] columnsNames;
-
+    private final Set<String> columnsNames;
     private final List<List<?>> rows = new ArrayList<>();
 
+    private final Map<String, ValueGenerator<?>> valueGenerators = new HashMap<>();
+
     public RowsBuilderByColumns(Column[] columns) {
-        this.columnsNames = stream(columns).map(Column::getColumnName).toArray(String[]::new);
+        this.columnsNames = stream(columns).map(Column::getColumnName).collect(toCollection(LinkedHashSet::new));
     }
 
     public RowsBuilderByColumns(String[] columnsNames) {
-        this.columnsNames = Arrays.copyOf(columnsNames, columnsNames.length);
+        this.columnsNames = stream(columnsNames).collect(toCollection(LinkedHashSet::new));
     }
 
     public RowsBuilderByColumns values(Object... values) {
@@ -38,12 +46,32 @@ public class RowsBuilderByColumns implements RowsBuilder {
     }
 
     private void checkValuesNumber(int length) {
-        Preconditions.checkArgument(columnsNames.length == length, "The number of values doesn't match the number of columns");
+        Preconditions.checkArgument(columnsNames.size() == length, "The number of values doesn't match the number of columns");
+    }
+
+    public RowsBuilderByColumns witDefault(Column column, Object value) {
+        return witDefault(column.getColumnName(), value);
+    }
+
+    public RowsBuilderByColumns witDefault(String columnName, Object value) {
+        return withGenerated(columnName, constant(value));
+    }
+
+    public RowsBuilderByColumns withGenerated(Column column, ValueGenerator<?> valueGenerator) {
+        return withGenerated(column.getColumnName(), valueGenerator);
+    }
+
+    public RowsBuilderByColumns withGenerated(String columnName, ValueGenerator<?> valueGenerator) {
+        Preconditions.checkArgument(!columnsNames.contains(columnName),
+                "Column " + columnName + " is already present in the set of columns' names");
+        valueGenerators.put(columnName, valueGenerator);
+
+        return this;
     }
 
     @Override
     public Row[] build() {
-        return rows.stream().map(values -> new Row(columnsNames, values)).toArray(Row[]::new);
+        return rows.stream().map(values -> new Row(columnsNames, values, valueGenerators)).toArray(Row[]::new);
     }
 
     @Override
@@ -57,13 +85,15 @@ public class RowsBuilderByColumns implements RowsBuilder {
 
         RowsBuilderByColumns that = (RowsBuilderByColumns) o;
 
-        return Arrays.equals(columnsNames, that.columnsNames) && rows.equals(that.rows);
+        return columnsNames.equals(that.columnsNames) && rows.equals(that.rows)
+                && valueGenerators.equals(that.valueGenerators);
     }
 
     @Override
     public int hashCode() {
-        int result = Arrays.hashCode(columnsNames);
+        int result = columnsNames.hashCode();
         result = 31 * result + rows.hashCode();
+        result = 31 * result + valueGenerators.hashCode();
 
         return result;
     }
