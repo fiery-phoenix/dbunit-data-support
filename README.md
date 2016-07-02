@@ -7,15 +7,12 @@ The starting point for tables data creation and storing is `DbUnitDataUtils` cla
 To work with tables it is required to implement `ConnectionAwareTable` interface, which returns information about table name,
 columns and connection required to update data in database:
 
-    ```java
     String getName();
     Column[] getColumns();
     IDatabaseConnection getConnection();
-    ```
 
 There could be used enum for this, for example:
 
-    ```java
     public enum TasksTables implements ConnectionAwareTable {
 
         USERS("USERS", Users.getColumns()),
@@ -59,7 +56,6 @@ There could be used enum for this, for example:
         }
 
     }
-    ```
 
 ### Supported features
 
