@@ -2,6 +2,65 @@
 
 Java API to build and populate tables data sets for dbunit (*not a unique implementation of the idea).
 
+The starting point for tables data creation and storing is `DbUnitDataUtils` class.
+
+To work with tables it is required to implement `ConnectionAwareTable` interface, which returns information about table name,
+columns and connection required to update data in database:
+
+    ```java
+    String getName();
+    Column[] getColumns();
+    IDatabaseConnection getConnection();
+    ```
+
+There could be used enum for this, for example:
+
+    ```java
+    public enum TasksTables implements ConnectionAwareTable {
+
+        USERS("USERS", Users.getColumns()),
+        LISTS("LISTS", Lists.getColumns()),
+        ...;
+
+        private final String name;
+        private final Column[] columns;
+
+        TasksTables(String name, Column[] columns) {
+            this.name = name;
+            this.columns = columns;
+        }
+
+        @Override
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public Column[] getColumns() {
+            return Arrays.copyOf(columns, columns.length);
+        }
+
+
+        @Override
+        public IDatabaseConnection getConnection() {
+            return ConnectionUtils.getConnection();
+        }
+
+    }
+
+    public interface Users {
+
+        Column ID = new Column("ID", BIGINT);
+        Column LOGIN = new GeneratableColumn<>("LOGIN", VARCHAR, stringSequence("test"));
+        Column NAME = new GeneratableColumn<>("NAME", VARCHAR, constant("Test"));
+
+        static Column[] getColumns() {
+            return new Column[]{ID, LOGIN, NAME};
+        }
+
+    }
+    ```
+
 ### Supported features
 
 - Clean tables using
@@ -47,11 +106,35 @@ Java API to build and populate tables data sets for dbunit (*not a unique implem
             cleanInsert(USERS, columns(NAME).repeatingValues("Shellena").times(4));
             ```
 
-### Upcoming features
-
 - Generated values
+
+    Quite often there are mandatory columns, which are irrelevant for tests, or can be populated by some rule.
+    To avoid specifying value for each row, there could be used auto generated values.
+    `ValueGenerator` implementations are responsible for returning next column value as required.
+    For default implementations please refer to `ValueGenerators` class.
+
     - values generation present in table description
-    - values generation passed to [template] row definition, before columns values definition
+
+    `GeneratableColumn` class extends `Column` with `ValueGenerator` which will be used when column value is not specified.
+    LOGIN column from the example below will be populated with values "test1", "test2", "test3" and so on, whenever it is not set directly,
+    and will also meet unique constraint.
+
+        Column LOGIN = new GeneratableColumn<>("LOGIN", VARCHAR, ValueGenerators.stringSequence("test"));
+
+    - values generation passed to [template] row definition or columns definition
+
+        ```java
+        RowBuilder template = row().withGenerated(ID, sequence()).withGenerated(LOGIN, stringSequence("login"));
+
+        row().withGenerated(ID, sequence(5, 5)).withGenerated(LOGIN, stringSequence("login")).times(10);
+
+        columns(NAME).repeatingValues("Sophi").times(20)
+        .withGenerated(ID, sequence(5, 2))
+        .withGenerated(LOGIN, stringSequence("login"));
+        ```
+
+### Upcoming features
+- More options for values generators (add random value generators, for example).
 - For now there is support only for ConnectionAwareTable, need to change this
 
 ### Some ideas
