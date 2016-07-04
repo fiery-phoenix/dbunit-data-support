@@ -1,4 +1,4 @@
-package org.dbunit.data.support.generators;
+package org.dbunit.data.support.generators.random;
 
 import org.junit.Test;
 

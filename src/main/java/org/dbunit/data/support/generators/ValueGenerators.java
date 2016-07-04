@@ -1,5 +1,6 @@
 package org.dbunit.data.support.generators;
 
+import org.dbunit.data.support.generators.random.RandomIntValueGenerator;
 import org.dbunit.data.support.generators.random.RandomValueGenerator;
 
 import java.util.Collection;
@@ -29,7 +30,7 @@ public final class ValueGenerators {
         return new StringSequenceGenerator(prefix, start, increment);
     }
 
-    public static <T> RandomValueGeneratorBuilder any() {
+    public static RandomValueGeneratorBuilder any() {
         return new RandomValueGeneratorBuilder();
     }
 
@@ -45,6 +46,10 @@ public final class ValueGenerators {
 
         public <T> RandomValueGenerator<T> of(Collection<T> values) {
             return new RandomValueGenerator<>(values);
+        }
+
+        public RandomIntValueGenerator between(int from, int to) {
+            return new RandomIntValueGenerator(from, to);
         }
 
     }
