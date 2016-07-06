@@ -1,6 +1,5 @@
 package org.dbunit.data.support;
 
-import org.dbunit.Assertion;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
@@ -22,7 +21,6 @@ import static org.dbunit.data.support.DbUnitDataUtils.columns;
 import static org.dbunit.data.support.DbUnitDataUtils.deleteFrom;
 import static org.dbunit.data.support.DbUnitDataUtils.insert;
 import static org.dbunit.data.support.DbUnitDataUtils.row;
-import static org.dbunit.data.support.DbUnitDataUtils.getTable;
 import static org.dbunit.data.support.tables.tasks.TasksTables.LISTS;
 import static org.dbunit.data.support.tables.tasks.TasksTables.USERS;
 import static org.dbunit.data.support.tables.tasks.Users.ID;
@@ -43,7 +41,7 @@ public class DbUnitDataUtilsTest {
         cleanInsert(USERS, row().with(ID, 1).with(LOGIN, "kit").with(NAME, "Sophi"),
                 row().with(ID, 2).with(LOGIN, "gray").with(NAME, "Shellena"),
                 row().with(ID, 3).with(LOGIN, "pawel").with(NAME, "Pawel Dou"));
-        Assertion.assertEquals(getUsersTableFromXml(), getTable(USERS));
+        assertThat(USERS).isEqualTo(getUsersTableFromXml());
     }
 
     @Test
@@ -64,7 +62,7 @@ public class DbUnitDataUtilsTest {
                 .values(1, "kit", "Sophi")
                 .values(2, "gray", "Shellena")
                 .values(3, "pawel", "Pawel Dou"));
-        Assertion.assertEquals(getUsersTableFromXml(), getTable(USERS));
+        assertThat(USERS).isEqualTo(getUsersTableFromXml());
     }
 
     @Test
