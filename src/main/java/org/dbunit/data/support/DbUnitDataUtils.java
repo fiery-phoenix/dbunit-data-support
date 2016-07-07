@@ -51,6 +51,10 @@ public final class DbUnitDataUtils {
         }
     }
 
+    public static TableBuilder table(RowsBuilder... rows) {
+        return new TableBuilder(rows);
+    }
+
     public static void deleteFrom(ConnectionAwareTable table) {
         executeOperation(DELETE_ALL, table);
     }

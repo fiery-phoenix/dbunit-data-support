@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import static java.math.BigDecimal.ONE;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.dbunit.data.support.DbUnitAssertions.assertThat;
 import static org.dbunit.data.support.DbUnitDataUtils.cleanInsert;
@@ -105,7 +106,7 @@ public class DbUnitDataUtilsTest {
 
         InOrder inOrder = inOrder(connection, pstmt);
         inOrder.verify(connection, times(1)).prepareStatement("insert into USERS (ID, LOGIN, NAME) values (?, ?, ?)");
-        inOrder.verify(pstmt).setInt(1, 1);
+        inOrder.verify(pstmt).setBigDecimal(1, ONE);
         inOrder.verify(pstmt).setString(2, "kit");
         inOrder.verify(pstmt).setString(3, "Sophi");
         inOrder.verify(pstmt).execute();
@@ -124,7 +125,7 @@ public class DbUnitDataUtilsTest {
 
         InOrder inOrder = inOrder(connection, pstmt);
         inOrder.verify(connection, times(1)).prepareStatement("insert into USERS (ID, LOGIN, NAME) values (?, ?, ?)");
-        inOrder.verify(pstmt).setInt(1, 1);
+        inOrder.verify(pstmt).setBigDecimal(1, ONE);
         inOrder.verify(pstmt).setString(2, "kit");
         inOrder.verify(pstmt).setString(3, "Sophi");
         inOrder.verify(pstmt).execute();

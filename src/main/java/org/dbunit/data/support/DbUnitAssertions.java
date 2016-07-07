@@ -11,7 +11,7 @@ public final class DbUnitAssertions {
     }
 
     public static TableAssert assertThat(ConnectionAwareTable table) {
-        return new TableAssert(getTable(table));
+        return new TableAssert(table, getTable(table));
     }
 
 }
