@@ -1,5 +1,6 @@
 package org.dbunit.data.support.assertions;
 
+import org.dbunit.data.support.model.TableBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -37,17 +38,29 @@ public class TableAssertionsTest {
     public void test_isEqualTo() {
         insert(USERS, columns(ID, LOGIN).values(1, "l1").values(2, "l2"));
         assertThat(USERS).isEqualTo(table(
-            row().with(ID, 1).with(LOGIN, "l1"),
-            row().with(ID, 2).with(LOGIN, "l2")));
+                row().with(ID, 1).with(LOGIN, "l1"),
+                row().with(ID, 2).with(LOGIN, "l2")));
     }
 
     @Test
     public void isEqualTo_should_fail_for_different_rows_order() {
         insert(USERS, columns(ID, LOGIN).values(1, "l1").values(2, "l2"));
         assertThatThrownBy(() -> assertThat(USERS).isEqualTo(table(
-            row().with(ID, 2).with(LOGIN, "l2"),
-            row().with(ID, 1).with(LOGIN, "l1")
+                row().with(ID, 2).with(LOGIN, "l2"),
+                row().with(ID, 1).with(LOGIN, "l1")
         ))).isInstanceOf(AssertionError.class);
+    }
+
+    @Test
+    public void isEqualTo_ignoring_columns() {
+        insert(USERS, columns(LOGIN).values("l1").values("l2"));
+        TableBuilder expectedTable = table(
+                row().with(LOGIN, "l1"),
+                row().with(LOGIN, "l2")
+        );
+        assertThat(USERS).ignoring(ID).isEqualTo(expectedTable);
+        assertThatThrownBy(() -> assertThat(USERS).isEqualTo(expectedTable))
+                .isInstanceOf(AssertionError.class);
     }
 
 }
