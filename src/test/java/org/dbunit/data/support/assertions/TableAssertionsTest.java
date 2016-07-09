@@ -57,7 +57,7 @@ public class TableAssertionsTest {
     }
 
     @Test
-    public void isEqualTo_ignoring_columns() {
+    public void test_isEqualTo_ignoring_columns() {
         insert(USERS, columns(LOGIN).values("l1").values("l2"));
         TableBuilder expectedTable = table(
                 row().with(LOGIN, "l1"),
@@ -69,13 +69,22 @@ public class TableAssertionsTest {
     }
 
     @Test
-    public void isEqualTo_with_numeric() {
+    public void test_isEqualTo_with_numeric() {
         insert(PACKAGES, columns(LISTS_LIMIT, PRICE).values(5, 25.5000000009).values(10, 50));
         TableBuilder expectedTable = table(
                 row().with(LISTS_LIMIT, 5).with(PRICE, new BigDecimal("25.5")),
                 row().with(LISTS_LIMIT, 10).with(PRICE, "50")
         );
         assertThat(PACKAGES).ignoring("ID", "SUMMARY").isEqualTo(expectedTable);
+    }
+
+    @Test
+    public void test_isEqualTo_ignoring_order() {
+        insert(USERS, columns(ID, LOGIN).values(1, "l1").values(2, "l2"));
+        assertThat(USERS).ignoringOrder().isEqualTo(table(
+                row().with(ID, 2).with(LOGIN, "l2"),
+                row().with(ID, 1).with(LOGIN, "l1")
+        ));
     }
 
 }

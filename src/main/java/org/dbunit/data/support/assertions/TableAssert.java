@@ -40,6 +40,11 @@ public class TableAssert {
         return this;
     }
 
+    public TableAssert ignoringOrder() {
+        comparisonStrategy = new IgnoringOrderComparisonStrategy();
+        return this;
+    }
+
     public void isEqualTo(ITable expectedTable) {
         comparisonStrategy.assertEqual(expectedTable, actualTable);
     }
