@@ -22,11 +22,11 @@ public final class ValueGenerators {
         return new LongSequenceGenerator(start, increment);
     }
 
-    public static StringSequenceGenerator stringSequence(String prefix) {
+    public static StringSequenceGenerator sequence(String prefix) {
         return new StringSequenceGenerator(prefix);
     }
 
-    public static StringSequenceGenerator stringSequence(String prefix, long start, long increment) {
+    public static StringSequenceGenerator sequence(String prefix, long start, long increment) {
         return new StringSequenceGenerator(prefix, start, increment);
     }
 

@@ -48,7 +48,7 @@ There could be used enum for this, for example:
     public interface Users {
 
         Column ID = new Column("ID", BIGINT);
-        Column LOGIN = new GeneratableColumn<>("LOGIN", VARCHAR, stringSequence("test"));
+        Column LOGIN = new GeneratableColumn<>("LOGIN", VARCHAR, sequence("test"));
         Column NAME = new GeneratableColumn<>("NAME", VARCHAR, constant("Test"));
 
         static Column[] getColumns() {
@@ -115,18 +115,18 @@ There could be used enum for this, for example:
     LOGIN column from the example below will be populated with values "test1", "test2", "test3" and so on, whenever it is not set directly,
     and will also meet unique constraint.
 
-        Column LOGIN = new GeneratableColumn<>("LOGIN", VARCHAR, ValueGenerators.stringSequence("test"));
+        Column LOGIN = new GeneratableColumn<>("LOGIN", VARCHAR, ValueGenerators.sequence("test"));
 
     - values generation passed to [template] row definition or columns definition
 
         ```java
-        RowBuilder template = row().withGenerated(ID, sequence()).withGenerated(LOGIN, stringSequence("login"));
+        RowBuilder template = row().withGenerated(ID, sequence()).withGenerated(LOGIN, sequence("login"));
 
-        row().withGenerated(ID, sequence(5, 5)).withGenerated(LOGIN, stringSequence("login")).times(10);
+        row().withGenerated(ID, sequence(5, 5)).withGenerated(LOGIN, sequence("login")).times(10);
 
         columns(NAME).repeatingValues("Sophi").times(20)
         .withGenerated(ID, sequence(5, 2))
-        .withGenerated(LOGIN, stringSequence("login"));
+        .withGenerated(LOGIN, sequence("login"));
         ```
 
 ### Upcoming features

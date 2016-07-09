@@ -12,7 +12,6 @@ import static org.dbunit.Assertion.assertEquals;
 import static org.dbunit.data.support.DbUnitDataUtils.columns;
 import static org.dbunit.data.support.DbUnitDataUtils.row;
 import static org.dbunit.data.support.generators.ValueGenerators.sequence;
-import static org.dbunit.data.support.generators.ValueGenerators.stringSequence;
 import static org.dbunit.data.support.tables.tasks.Lists.SUMMARY;
 import static org.dbunit.data.support.tables.tasks.TasksTables.USERS;
 import static org.dbunit.data.support.tables.tasks.Users.ID;
@@ -55,7 +54,7 @@ public class TableBuilderTest {
                         row().with(ID, 10).with(LOGIN, "login2")
                 ).build(USERS),
                 new TableBuilder(
-                        row().withGenerated(ID, sequence(5, 5)).withGenerated(LOGIN, stringSequence("login")).times(2)
+                        row().withGenerated(ID, sequence(5, 5)).withGenerated(LOGIN, sequence("login")).times(2)
                 ).build(USERS));
 
 
@@ -67,13 +66,13 @@ public class TableBuilderTest {
                         .values(5)
                         .values(7)
                         .witDefault(NAME, "Gray")
-                        .withGenerated(LOGIN, stringSequence("login"))
+                        .withGenerated(LOGIN, sequence("login"))
                 ).build(USERS));
     }
 
     @Test
     public void column_value_for_template_row_is_generated_when_applicable() throws DatabaseUnitException {
-        RowBuilder template = row().withGenerated(ID, sequence()).withGenerated(LOGIN, stringSequence("t"));
+        RowBuilder template = row().withGenerated(ID, sequence()).withGenerated(LOGIN, sequence("t"));
         assertEquals(new TableBuilder(
                         row().with(ID, 1).with(LOGIN, "t1"),
                         row().with(ID, 2).with(LOGIN, "other"),

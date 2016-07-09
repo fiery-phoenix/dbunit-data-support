@@ -4,6 +4,8 @@ import org.dbunit.data.support.model.TableBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.math.BigDecimal;
+
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.dbunit.data.support.DbUnitAssertions.assertThat;
 import static org.dbunit.data.support.DbUnitDataUtils.columns;
@@ -11,7 +13,10 @@ import static org.dbunit.data.support.DbUnitDataUtils.deleteFrom;
 import static org.dbunit.data.support.DbUnitDataUtils.insert;
 import static org.dbunit.data.support.DbUnitDataUtils.row;
 import static org.dbunit.data.support.DbUnitDataUtils.table;
+import static org.dbunit.data.support.tables.tasks.Packages.LISTS_LIMIT;
+import static org.dbunit.data.support.tables.tasks.Packages.PRICE;
 import static org.dbunit.data.support.tables.tasks.TasksTables.LISTS;
+import static org.dbunit.data.support.tables.tasks.TasksTables.PACKAGES;
 import static org.dbunit.data.support.tables.tasks.TasksTables.USERS;
 import static org.dbunit.data.support.tables.tasks.Users.ID;
 import static org.dbunit.data.support.tables.tasks.Users.LOGIN;
@@ -61,6 +66,16 @@ public class TableAssertionsTest {
         assertThat(USERS).ignoring(ID).isEqualTo(expectedTable);
         assertThatThrownBy(() -> assertThat(USERS).isEqualTo(expectedTable))
                 .isInstanceOf(AssertionError.class);
+    }
+
+    @Test
+    public void isEqualTo_with_numeric() {
+        insert(PACKAGES, columns(LISTS_LIMIT, PRICE).values(5, 25.5000000009).values(10, 50));
+        TableBuilder expectedTable = table(
+                row().with(LISTS_LIMIT, 5).with(PRICE, new BigDecimal("25.5")),
+                row().with(LISTS_LIMIT, 10).with(PRICE, "50")
+        );
+        assertThat(PACKAGES).ignoring("ID", "SUMMARY").isEqualTo(expectedTable);
     }
 
 }
