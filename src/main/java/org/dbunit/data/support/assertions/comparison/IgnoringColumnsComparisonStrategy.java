@@ -1,4 +1,4 @@
-package org.dbunit.data.support.assertions;
+package org.dbunit.data.support.assertions.comparison;
 
 import org.dbunit.Assertion;
 import org.dbunit.DatabaseUnitException;

@@ -87,4 +87,15 @@ public class TableAssertionsTest {
         ));
     }
 
+    @Test
+    public void test_isEqualTo_ignoring_order_and_columns() {
+        insert(USERS, columns(LOGIN).values("l1").values("l2"));
+        TableBuilder expectedTable = table(
+                row().with(LOGIN, "l2"),
+                row().with(LOGIN, "l1")
+        );
+        assertThat(USERS).ignoring(ID).andOrder().isEqualTo(expectedTable);
+        assertThat(USERS).ignoringOrder().andColumns(ID).isEqualTo(expectedTable);
+    }
+
 }

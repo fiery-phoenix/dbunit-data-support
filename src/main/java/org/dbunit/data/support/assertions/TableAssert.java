@@ -1,6 +1,8 @@
 package org.dbunit.data.support.assertions;
 
 import org.dbunit.DatabaseUnitException;
+import org.dbunit.data.support.assertions.comparison.SimpleTableComparisonStrategy;
+import org.dbunit.data.support.assertions.comparison.TableComparisonStrategy;
 import org.dbunit.data.support.exceptions.DbUnitRuntimeException;
 import org.dbunit.data.support.model.Table;
 import org.dbunit.data.support.model.TableBuilder;
@@ -8,7 +10,7 @@ import org.dbunit.dataset.Column;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
 
-import static java.util.Arrays.stream;
+import static org.dbunit.data.support.utils.ConversionUtils.toColumnsNames;
 import static org.junit.Assert.assertEquals;
 
 public class TableAssert {
@@ -16,7 +18,7 @@ public class TableAssert {
     private final Table tableDefinition;
     private final ITable actualTable;
 
-    private TableComparisonStrategy comparisonStrategy = SimpleTableComparisonStrategy.INSTANCE;
+    private TableComparisonStrategy comparisonStrategy = SimpleTableComparisonStrategy.getInstance();
 
     public TableAssert(Table tableDefinition, ITable actualTable) {
         this.tableDefinition = tableDefinition;
@@ -31,17 +33,20 @@ public class TableAssert {
         assertEquals(size, actualTable.getRowCount());
     }
 
-    public TableAssert ignoring(Column... columns) {
-        return ignoring(stream(columns).map(Column::getColumnName).toArray(String[]::new));
+    public IgnoringColumnsTableAssert ignoring(Column... columns) {
+        return ignoring(toColumnsNames(columns));
     }
 
-    public TableAssert ignoring(String... columns) {
-        comparisonStrategy = new IgnoringColumnsComparisonStrategy(columns);
-        return this;
+    public IgnoringColumnsTableAssert ignoring(String... columns) {
+        return new IgnoringColumnsTableAssert(this, columns);
     }
 
-    public TableAssert ignoringOrder() {
-        comparisonStrategy = new IgnoringOrderComparisonStrategy();
+    public IgnoringOrderTableAssert ignoringOrder() {
+        return new IgnoringOrderTableAssert(this);
+    }
+
+    protected TableAssert withComparisonStrategy(TableComparisonStrategy comparisonStrategy) {
+        this.comparisonStrategy = comparisonStrategy;
         return this;
     }
 
