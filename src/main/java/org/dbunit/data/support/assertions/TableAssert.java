@@ -7,16 +7,19 @@ import org.dbunit.data.support.exceptions.DbUnitRuntimeException;
 import org.dbunit.data.support.model.Table;
 import org.dbunit.data.support.model.TableBuilder;
 import org.dbunit.dataset.Column;
+import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
 
 import static org.dbunit.data.support.utils.ConversionUtils.toColumnsNames;
+import static org.dbunit.dataset.filter.DefaultColumnFilter.includedColumnsTable;
 import static org.junit.Assert.assertEquals;
 
 public class TableAssert {
 
     private final Table tableDefinition;
     private final ITable actualTable;
+    private String[] columns;
 
     private TableComparisonStrategy comparisonStrategy = SimpleTableComparisonStrategy.getInstance();
 
@@ -31,6 +34,15 @@ public class TableAssert {
 
     public void hasSize(int size) {
         assertEquals(size, actualTable.getRowCount());
+    }
+
+    public TableAssert forColumns(Column... columns) {
+        return forColumns(toColumnsNames(columns));
+    }
+
+    public TableAssert forColumns(String... columns) {
+        this.columns = columns;
+        return this;
     }
 
     public IgnoringColumnsTableAssert ignoring(Column... columns) {
@@ -51,13 +63,22 @@ public class TableAssert {
     }
 
     public void isEqualTo(ITable expectedTable) {
-        comparisonStrategy.assertEqual(expectedTable, actualTable);
+        comparisonStrategy.assertEqual(filterColumns(expectedTable), filterColumns(actualTable));
     }
 
     public void isEqualTo(IDataSet expectedTable) {
         try {
-            comparisonStrategy.assertEqual(expectedTable.getTable(tableDefinition.getName()), actualTable);
+            comparisonStrategy.assertEqual(filterColumns(expectedTable.getTable(tableDefinition.getName())),
+                    filterColumns(actualTable));
         } catch (DatabaseUnitException e) {
+            throw new DbUnitRuntimeException(e);
+        }
+    }
+
+    private ITable filterColumns(ITable table) {
+        try {
+            return columns == null ? table : includedColumnsTable(table, columns);
+        } catch (DataSetException e) {
             throw new DbUnitRuntimeException(e);
         }
     }

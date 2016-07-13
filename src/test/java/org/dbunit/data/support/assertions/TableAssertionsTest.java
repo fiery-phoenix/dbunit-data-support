@@ -98,4 +98,16 @@ public class TableAssertionsTest {
         assertThat(USERS).ignoringOrder().andColumns(ID).isEqualTo(expectedTable);
     }
 
+    @Test
+    public void test_isEqualTo_for_specific_columns() {
+        insert(USERS, columns(LOGIN).values("l1").values("l2"));
+        TableBuilder expectedTable = table(
+                row().with(LOGIN, "l2"),
+                row().with(LOGIN, "l1")
+        );
+        assertThat(USERS).forColumns(LOGIN).ignoringOrder().isEqualTo(expectedTable);
+        assertThatThrownBy(() -> assertThat(USERS).forColumns(ID).ignoringOrder().isEqualTo(expectedTable))
+                .isInstanceOf(AssertionError.class);
+    }
+
 }
