@@ -129,6 +129,21 @@ There could be used enum for this, for example:
         .withGenerated(LOGIN, sequence("login"));
         ```
 
+- Assertions
+
+    To check table data there could be used table assertions from `org.dbunit.data.support.DbUnitAssertions`.
+    For now there are available table size and comparison with another table assertions.
+
+    ```java
+    ssertThat(USERS).hasSize(2);
+
+    TableBuilder expectedTable = table(
+                    row().with(LOGIN, "l2"),
+                    row().with(LOGIN, "l1")
+            );
+    assertThat(USERS).ignoring(ID).andOrder().isEqualTo(expectedTable);
+     ```
+
 ### Upcoming features
 - More options for values generators (add random value generators, for example).
 - For now there is support only for ConnectionAwareTable, need to change this
