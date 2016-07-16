@@ -1,6 +1,7 @@
 package org.dbunit.data.support.assertions;
 
 import org.dbunit.DatabaseUnitException;
+import org.dbunit.data.support.assertions.columns.ColumnAssert;
 import org.dbunit.data.support.assertions.comparison.SimpleTableComparisonStrategy;
 import org.dbunit.data.support.assertions.comparison.TableComparisonStrategy;
 import org.dbunit.data.support.exceptions.DbUnitRuntimeException;
@@ -26,6 +27,14 @@ public class TableAssert {
     public TableAssert(Table tableDefinition, ITable actualTable) {
         this.tableDefinition = tableDefinition;
         this.actualTable = actualTable;
+    }
+
+    public ColumnAssert column(Column column) {
+        return column(column.getColumnName());
+    }
+
+    public ColumnAssert column(String column) {
+        return new ColumnAssert(actualTable, column);
     }
 
     public void isEmpty() {
